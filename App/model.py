@@ -35,3 +35,56 @@ Se define la estructura de un catálogo de videos. El catálogo tendrá dos list
 los mismos.
 """
 
+# Construccion de modelos
+
+def newCatalog():
+    """
+    Inicializa el catálogo de Obras de arte. Para Crea en primer lugar dos entradas cada una para autores y obras de artes
+    y luego para cada una de estas crea una lista  vacia, donde se guarda la informacion.
+    """
+    catalog = {'obra_de_arte': None,
+               'artista': None,}
+
+    catalog['obra_de_arte'] = lt.newList()
+    catalog['artista'] = lt.newList()
+
+    return catalog
+
+# Funciones para agregar informacion al catalogo
+
+def addobraarte(catalog, arte):
+    lt.addLast(catalog['obra_de_arte'], arte)
+
+
+def addartista(catalog, arte):
+    lt.addLast(catalog['artista'], arte)
+
+# Funciones para creacion de datos
+
+# Funciones de consulta
+
+def obtener_ultimos_artes(catalog):
+    """
+    Retorna los tres ultimas obras de arte cargadas
+    """
+    artes = catalog['obra_de_arte']
+    ultimostres = lt.newList()
+    for cont in range(lt.size(artes)-2, lt.size(artes)+1):
+        arte = lt.getElement(artes, cont)
+        lt.addLast(ultimostres, arte)
+    return ultimostres
+
+def obtener_ultimos_artistas(catalog):
+    """
+    Retorna los tres ultimos artistas cargados
+    """
+    artes = catalog['artista']
+    ultimostres = lt.newList()
+    for cont in range(lt.size(artes)-2, lt.size(artes)+1):
+        arte = lt.getElement(artes, cont)
+        lt.addLast(ultimostres, arte)
+    return ultimostres
+
+# Funciones utilizadas para comparar elementos dentro de una lista
+
+# Funciones de ordenamiento
