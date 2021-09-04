@@ -42,11 +42,11 @@ def newCatalog():
     Inicializa el catálogo de Obras de arte. Para Crea en primer lugar dos entradas cada una para autores y obras de artes
     y luego para cada una de estas crea una lista  vacia, donde se guarda la informacion.
     """
-    catalog = {'obra_de_arte': None,
-               'artista': None,}
+    catalog = {'obra_de_arte': None,'artista': None,'Referencias_Autor_ObradeArte': None}
 
     catalog['obra_de_arte'] = lt.newList()
     catalog['artista'] = lt.newList()
+    catalog['nacidos_primero'] = lt.newList()
 
     return catalog
 
@@ -55,9 +55,9 @@ def newCatalog():
 def addobraarte(catalog, arte):
     lt.addLast(catalog['obra_de_arte'], arte)
 
-
 def addartista(catalog, arte):
     lt.addLast(catalog['artista'], arte)
+    lt.addLast(catalog['nacidos_primero'], arte)
 
 # Funciones para creacion de datos
 
@@ -85,6 +85,42 @@ def obtener_ultimos_artistas(catalog):
         lt.addLast(ultimostres, arte)
     return ultimostres
 
+def nacidos_rango(catalog, año_inicial, año_final):
+
+    artistas = catalog['nacidos_primero']
+    booknacidos_rango = lt.newList()
+    for artista in lt.iterator(artistas):
+        if año_inicial <= int(artista['BeginDate']) and año_final >= int(artista['BeginDate']):
+            lt.addLast(booknacidos_rango,artista)
+    return booknacidos_rango
+
+def obtener_ultimos_nacidos(catalog):
+    """
+    Retorna los tres  ultimos artistas nacidos
+    """
+    ultimostres = lt.newList()
+    for cont in range(lt.size(catalog)-2, lt.size(catalog)+1):
+        arte = lt.getElement(catalog, cont)
+        lt.addLast(ultimostres, arte)
+    return ultimostres
+
+def obtener_primeros_nacidos(catalog):
+    """
+    Retorna los tres  primeros artistas nacidos
+    """
+
+    primeros_tres = lt.newList()
+    for cont in range(1, 4):
+        arte = lt.getElement(catalog, cont)
+        lt.addLast(primeros_tres, arte)
+    return primeros_tres
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def compareratings(artista1, artista2):
+    return (float(artista1['BeginDate']) < float(artista2['BeginDate']))
+
 # Funciones de ordenamiento
+
+def sortArtistas(catalog):
+    sa.sort(catalog['nacidos_primero'], compareratings)
