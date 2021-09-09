@@ -47,8 +47,6 @@ def loadData(catalog):
     """
     loadArte(catalog)
     loadArtista(catalog)
-    sortArtistas(catalog)
-
 
 def loadArte(catalog):
     """
@@ -58,7 +56,6 @@ def loadArte(catalog):
     input_file = csv.DictReader(open(Artefile, encoding='utf-8'))
     for arte in input_file:
         model.addobraarte(catalog, arte)
-
 
 def loadArtista(catalog):
     """
@@ -71,12 +68,17 @@ def loadArtista(catalog):
 
 # Funciones de ordenamiento
 
-
-def sortArtistas(catalog):
+def sortArsortañostistas(catalog):
     """
     Ordena los artistas por nacimiento
     """
     model.sortArtistas(catalog)
+
+def sortantiguedad(catalog):
+    """
+    Ordena los artistas por nacimiento
+    """
+    model.sortantiguedad(catalog)
     
 # Funciones de consulta sobre el catálogo
 
@@ -99,6 +101,11 @@ def nacidos_rango(catalog, año_inicial, año_final):
     nacidos_rango = model.nacidos_rango(catalog,año_inicial,año_final)
     return nacidos_rango
 
+def comprados_rango(catalog, fecha_inicial, fecha_final):
+
+    nacidos_rango = model.comprados_rango(catalog,fecha_inicial,fecha_final)
+    return nacidos_rango
+
 def obtener_ultimos_nacidos(catalog):
     """
     Retorna los tres ultimos artistas nacidos
@@ -117,6 +124,10 @@ def consulta_codigo(catalog,codigo):
     artista = model.consulta_codigo(catalog,codigo)
     return artista
 
+def filtrar_depto(catalog,departamento):
+    obras = model.filtrar_depto(catalog,departamento)
+    return obras
+
 def cantidad_tecnicas(catalog):
     tecnicas = model.cantidad_tecnicas(catalog)
     return tecnicas
@@ -128,3 +139,9 @@ def cantidad_tecnicas_cada(catalog):
 def consulta_obras(catalog,tecnica):
     obras = model.consulta_obras(catalog,tecnica)
     return obras
+
+def conversion_fechas(fecha):
+    """
+    Ordena los artistas por nacimiento
+    """
+    model.conversion_fechas(fecha)
