@@ -47,6 +47,7 @@ def loadData(catalog):
     """
     loadArte(catalog)
     loadArtista(catalog)
+    sortArsortañostistas(catalog)
 
 def loadArte(catalog):
     """
@@ -74,11 +75,12 @@ def sortArsortañostistas(catalog):
     """
     model.sortArtistas(catalog)
 
-def sortantiguedad(catalog):
+def sortcostos(catalog):
     """
     Ordena los artistas por nacimiento
     """
-    model.sortantiguedad(catalog)
+    orden = model.sortcostos(catalog)
+    return orden
     
 # Funciones de consulta sobre el catálogo
 
@@ -140,8 +142,41 @@ def consulta_obras(catalog,tecnica):
     obras = model.consulta_obras(catalog,tecnica)
     return obras
 
-def conversion_fechas(fecha):
+def calculo_de_transporte(catalog):
     """
     Ordena los artistas por nacimiento
     """
-    model.conversion_fechas(fecha)
+    obras = model.calculo_de_transporte(catalog)
+    return obras
+
+def suma_costo(catalog):
+    """
+    Ordena los artistas por nacimiento
+    """
+    costo = model.suma_costo(catalog)
+    return costo
+
+def suma_peso(catalog):
+    """
+    Ordena los artistas por nacimiento
+    """
+    peso = model.suma_peso(catalog)
+    return peso
+
+def obtener_costosas(catalog):
+    """
+    Retorna los tres ultimos artistas nacidos
+    """
+    costosas = model.obtener_costosas(catalog)
+    return costosas
+
+def buscar_artistas(codigos,catalog):
+    nombres = model.buscar_artistas(codigos,catalog)
+    return nombres
+
+def obtener_antiguas(catalog):
+    """
+    Retorna los tres ultimos artistas nacidos
+    """
+    orden = model.obtener_antiguas(catalog)
+    return orden
