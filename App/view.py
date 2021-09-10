@@ -46,11 +46,11 @@ def printMenu():
     print("0- Salir")
 
 
-def initCatalog():
+def initCatalog(TIPO):
     """
     Inicializa el catalogo del museo
     """
-    return controller.initCatalog()
+    return controller.initCatalog(TIPO)
 
 
 def loadData(catalog):
@@ -133,6 +133,16 @@ def print_obras_costosas(elementos,catalogo):
                   artistas + ' clasificacion: ' + artista['clasificacion'] + ' fecha: ' + 
                   artista['fecha'] + ' Dimensiones: ' + artista['dimensiones'] 
                   + ' tecnica: ' + tecnica + ' costo: ' + str(float(artista['costo'])) + '\n')
+
+def printSortResults(ord_books, sample=10): 
+    size = lt.size(ord_books) 
+    if size > sample: 
+        print("Los primeros ", sample, " obras ordenados son:") 
+        i=1 
+        while i <= sample: 
+            book = lt.getElement(ord_books,i) 
+            print('Titulo: ' + book['Title'] + ' Fecha: ' + book['DateAcquired']) 
+            i+=1
     
 
 catalog = None
@@ -144,8 +154,9 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        tipo = input('Escriba el tipo de TAD lista, entre ARRAY_LIST o SINGLE_LINKED')
         print("Cargando información de los archivos ...." + '\n')
-        catalog = initCatalog()
+        catalog = initCatalog(tipo)
         loadData(catalog)
         print('Obras de Arte Cargadas cargados: ' + str(lt.size(catalog['obra_de_arte'])))
         print('Artistas cargados: ' + str(lt.size(catalog['artista'])))
@@ -174,8 +185,18 @@ while True:
             print_nacidos(ultimos_nacidos)
 
     elif int(inputs[0]) == 3:
-        fecha_inicial = input("Porfavor, dijite la fecha inical del rango que ddesea buscar (Formato: Año/Mes/Dia): ")
-        fecha_final = input("Porfavor, dijite la fecha final del rango que ddesea buscar (Formato: Año/Mes/Dia): ")
+        tipo = input('Escriba el tipo de TAD lista, entre (Insertion, Shell, Merge o Quick Sorts)')
+        size = input("Indique tamaño de la muestra: ")
+        catalog = initCatalog(tipo)
+        loadData(catalog)
+        if int(size) > lt.size(catalog['obra_de_arte']):
+            print('el tamaño seleccionado supera la carga de archivos')
+        else: 
+            result = controller.sortBooks(catalog, int(size),tipo)
+            print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ", str(result[0])) 
+            printSortResults(result[1])
+
+
     elif int(inputs[0]) == 4:
         Artista = input("Porfavor, dijite el nombre del artista que desea buscar")
         catalog = initCatalog()

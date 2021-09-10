@@ -24,11 +24,15 @@
  * Dario Correal - Version inicial
  """
 
-
+import time
+from datetime import date
 from DISClib.DataStructures.arraylist import newList
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import insertionsort as insertion
+from DISClib.Algorithms.Sorting import mergesort as merge
+from DISClib.Algorithms.Sorting import quicksort as quick
 assert cf
 
 """
@@ -38,15 +42,15 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog():
+def newCatalog(tipo):
     """
     Inicializa el catálogo de Obras de arte. Para Crea en primer lugar dos entradas cada una para autores y obras de artes
     y luego para cada una de estas crea una lista  vacia, donde se guarda la informacion.
     """
     catalog = {'obra_de_arte': None,'artista': None,'nacidos_primero': None,'obras_ordenadas': None, 'obras_a_llevar':None}
 
-    catalog['obra_de_arte'] = lt.newList('ARRAY_LIST')
-    catalog['artista'] = lt.newList('ARRAY_LIST')
+    catalog['obra_de_arte'] = lt.newList(tipo)
+    catalog['artista'] = lt.newList(tipo)
     catalog['nacidos_primero'] = lt.newList('ARRAY_LIST')
     catalog['obras_ordenadas'] = lt.newList('ARRAY_LIST',cmpfunction=comparecodigos)
     catalog['obras_a_llevar'] = lt.newList()
@@ -347,6 +351,23 @@ def comparecodigos(authorname1, author):
         return 0
     return -1
 
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+
+    if artwork1['DateAcquired'] == '':
+
+        fecha1 = 0
+    else: 
+        fecha1 = int((date.fromisoformat(artwork1['DateAcquired'])).strftime("%Y%m%d%H%M%S"))
+
+    if artwork2['DateAcquired'] == '':
+
+        fecha2 = 0
+
+    else:
+        fecha2 = int((date.fromisoformat(artwork2['DateAcquired'])).strftime("%Y%m%d%H%M%S"))
+
+    return fecha1 < fecha2
+
 # Funciones de ordenamiento
 
 def sortArtistas(catalog):
@@ -359,3 +380,25 @@ def sortcostos(catalog):
 def sortantiguas(catalog):
     orden = sa.sort(catalog, compareantiguas)
     return orden
+
+def sortBooks(catalog, size, ordenamiento):
+    # TODO completar modificaciones para el laboratorio 4
+
+    obras = lt.newList()
+    sub_list = lt.subList(catalog['obra_de_arte'], 1, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    if ordenamiento == 'Insertion':
+        sorted_list = insertion.sort(sub_list, cmpArtworkByDateAcquired)
+    elif ordenamiento == 'Shell':
+        sorted_list = sa.sort(sub_list, cmpArtworkByDateAcquired)
+    elif ordenamiento == 'Merge':
+        sorted_list = merge.sort(sub_list, cmpArtworkByDateAcquired)
+    elif ordenamiento == 'Quick':
+        sorted_list = quick.sort(sub_list, cmpArtworkByDateAcquired)
+    stop_time = time.process_time()
+    for p in lt.iterator(sorted_list):
+        if p['DateAcquired'] != '':
+            lt.addLast(obras,p)
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg,obras
