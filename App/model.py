@@ -25,14 +25,13 @@
  """
 
 import time
-from datetime import date
-from DISClib.DataStructures.arraylist import newList
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import mergesort as merge
 from DISClib.Algorithms.Sorting import quicksort as quick
+from datetime import date
 assert cf
 
 """
@@ -42,15 +41,15 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog(tipo):
+def newCatalog():
     """
     Inicializa el catálogo de Obras de arte. Para Crea en primer lugar dos entradas cada una para autores y obras de artes
     y luego para cada una de estas crea una lista  vacia, donde se guarda la informacion.
     """
     catalog = {'obra_de_arte': None,'artista': None,'nacidos_primero': None,'obras_ordenadas': None, 'obras_a_llevar':None}
 
-    catalog['obra_de_arte'] = lt.newList(tipo)
-    catalog['artista'] = lt.newList(tipo)
+    catalog['obra_de_arte'] = lt.newList('ARRAY_LIST')
+    catalog['artista'] = lt.newList('ARRAY_LIST')
     catalog['nacidos_primero'] = lt.newList('ARRAY_LIST')
     catalog['obras_ordenadas'] = lt.newList('ARRAY_LIST',cmpfunction=comparecodigos)
     catalog['obras_a_llevar'] = lt.newList()
@@ -116,6 +115,16 @@ def newCosto(codigo_obra,costo,peso,titulo,artistas,clasificacion,fecha,dimensio
     artista['dimensiones'] = dimensiones
     artista['tecnica'] = tecnica
     return artista
+
+def newTecnica(nombre_tecnica):
+    """
+    Crea una nueva estructura para modelar los libros de
+    un autor y su promedio de ratings
+    """
+    tecnica = {'Tecnica': "", "Cantidad": 0}
+    tecnica['Tecnica'] = nombre_tecnica
+    tecnica['Cantidad'] = None
+    return tecnica
 # Funciones de consulta
 
 def obtener_ultimos_artes(catalog):
@@ -185,39 +194,28 @@ def consulta_codigo(catalog,nombre):
 
 def cantidad_tecnicas(artistas):
 
-    cantidad_de_tecnicas_veces = {}
+    cantidad_de_tecnicas_veces = lt.newList('ARRAY_LIST',cmpfunction=comparetecnicas)
     tecnicas_final = lt.newList('ARRAY_LIST')
     for partes in lt.iterator(artistas['obras']):
         lt.addLast(tecnicas_final,partes['Medium'])
 
     for i in lt.iterator(tecnicas_final):
-        if i in cantidad_de_tecnicas_veces:
-            cantidad_de_tecnicas_veces[i] += 1
-        else: 
-            cantidad_de_tecnicas_veces[i] = 1
-
+        posauthor = lt.isPresent(cantidad_de_tecnicas_veces, i)
+        if posauthor > 0:
+            artista = lt.getElement(cantidad_de_tecnicas_veces, posauthor)
+            artista['Cantidad'] += 1
+        else:
+            artista = newTecnica(i)
+            artista['Cantidad'] = 1
+            lt.addLast(cantidad_de_tecnicas_veces, artista)
+        
     k = 0
-    for p in cantidad_de_tecnicas_veces:
-        if cantidad_de_tecnicas_veces[p] > k:
-            k = cantidad_de_tecnicas_veces[p]
-            maximo = p
+    for p in lt.iterator(cantidad_de_tecnicas_veces):
+        if int(p['Cantidad']) > k:
+            k = p['Cantidad']
+            maximo = p['Tecnica']
     
-    return maximo
-
-def cantidad_tecnicas_cada(artistas):
-
-    cantidad_de_tecnicas_veces = {}
-    tecnicas_final = lt.newList('ARRAY_LIST')
-    for partes in lt.iterator(artistas['obras']):
-        lt.addLast(tecnicas_final,partes['Medium'])
-
-    for i in lt.iterator(tecnicas_final):
-        if i in cantidad_de_tecnicas_veces:
-            cantidad_de_tecnicas_veces[i] += 1
-        else: 
-            cantidad_de_tecnicas_veces[i] = 1
-
-    return cantidad_de_tecnicas_veces
+    return maximo,cantidad_de_tecnicas_veces
 
 def consulta_obras(artistas,tecnica):
 
@@ -259,9 +257,10 @@ def calculo_de_transporte(catalog):
             costo = (float(altura)*float(ancho)*72)/10000
             if (profundidad != 0 and profundidad != ''):
                 costo = max((float(altura)*float(ancho)*72)/10000,(float(altura)*float(ancho)*72*float(profundidad))/10000)
-            if (peso != 0 and peso != ''):
+            if (peso != 0 and peso != '') and (profundidad != 0 and profundidad != ''):
                 costo = max((float(peso) * 72)/10000,(float(altura)*float(ancho)*72)/10000,(float(altura)*float(ancho)*72*float(profundidad))/10000)
-
+            elif (peso != 0 and peso != '') and (profundidad == 0 or profundidad == ''):
+                costo = max((float(peso) * 72)/10000,(float(altura)*float(ancho)*72)/10000)
         elif (peso != 0 and peso != ''):
             costo1 = (float(peso) * 72)/10000
             costo = max(costo1,costo)
@@ -292,7 +291,7 @@ def suma_peso(catalog):
 
     suma = 0
     for p in lt.iterator(catalog):
-        suma += p['peso']
+        suma += float(p['peso'])
 
     return float(suma)
 
@@ -346,8 +345,13 @@ def compareantiguas(artista1, artista2):
 def comparacostos(artista1, artista2):
     return (float(artista1['costo']) > float(artista2['costo']))
 
-def comparecodigos(authorname1, author):
-    if (authorname1.lower() == author['codigo'].lower()):
+def comparecodigos(codigo1, codigo):
+    if (codigo1.lower() == codigo['codigo'].lower()):
+        return 0
+    return -1
+
+def comparetecnicas(tecnica1, tecnica):
+    if (tecnica1.lower() == tecnica['Tecnica'].lower()):
         return 0
     return -1
 
@@ -382,9 +386,7 @@ def sortantiguas(catalog):
     return orden
 
 def sortBooks(catalog, size, ordenamiento):
-    # TODO completar modificaciones para el laboratorio 4
 
-    obras = lt.newList()
     sub_list = lt.subList(catalog['obra_de_arte'], 1, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
@@ -397,8 +399,5 @@ def sortBooks(catalog, size, ordenamiento):
     elif ordenamiento == 'Quick':
         sorted_list = quick.sort(sub_list, cmpArtworkByDateAcquired)
     stop_time = time.process_time()
-    for p in lt.iterator(sorted_list):
-        if p['DateAcquired'] != '':
-            lt.addLast(obras,p)
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg,obras
+    return elapsed_time_mseg,sorted_list

@@ -31,11 +31,11 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de obras de arte y artistas
 
-def initCatalog(TIPO):
+def initCatalog():
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
-    catalog = model.newCatalog(TIPO)
+    catalog = model.newCatalog()
     return catalog
 
 # Funciones para la carga de datos
@@ -53,7 +53,7 @@ def loadArte(catalog):
     """
     Carga los archivos de las obras de arte y se agrega a la lista de obras de arte
     """
-    Artefile = cf.data_dir + 'Moma/Artworks-utf8-small.csv'
+    Artefile = cf.data_dir + 'Moma/Artworks-utf8-30pct.csv'
     input_file = csv.DictReader(open(Artefile, encoding='utf-8'))
     for arte in input_file:
         model.addobraarte(catalog, arte)
@@ -62,7 +62,7 @@ def loadArtista(catalog):
     """
     Carga los archivos de loas artistas y se agrega a la lista de autores
     """
-    Artistafile = cf.data_dir + 'Moma/Artists-utf8-small.csv'
+    Artistafile = cf.data_dir + 'Moma/Artists-utf8-30pct.csv'
     input_file = csv.DictReader(open(Artistafile, encoding='utf-8'))
     for tag in input_file:
         model.addartista(catalog, tag)
@@ -138,10 +138,6 @@ def filtrar_depto(catalog,departamento):
 
 def cantidad_tecnicas(catalog):
     tecnicas = model.cantidad_tecnicas(catalog)
-    return tecnicas
-
-def cantidad_tecnicas_cada(catalog):
-    tecnicas = model.cantidad_tecnicas_cada(catalog)
     return tecnicas
 
 def consulta_obras(catalog,tecnica):
