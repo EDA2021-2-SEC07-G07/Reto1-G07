@@ -169,8 +169,8 @@ def print_obras_rango_primeras(elementos):
             for nombre in lt.iterator(nombres):
                 if lt.size(nombres) > 1:
                     artistas += nombre + ', '
-                else: artistas = nombre
-            print('TITULO: ' + obra['Title'] + ';   ' + 'FECHA: ' + '  ARTISTAS: ' + artistas +  ';   ' +
+                else: artistas = nombre 
+            print('TITULO: ' + obra['Title'] + ';   ' + '  ARTISTAS: ' + artistas +  ';   ' + '  FECHA: ' + 
                 obra['DateAcquired'] + ';   ' + ' MEDIO: ' + obra['Medium'] + ';   ' + ' DIMENSIONES: ' + obra['Dimensions'] +'.' +   '\n')
     else:
         print('No se encontraron artistas nacidos')
@@ -186,7 +186,7 @@ def print_obras_rango_ultimas(elementos):
                 if lt.size(nombres) > 1:
                     artistas += nombre + ', '
                 else: artistas = nombre
-            print('TITULO: ' + obra['Title'] + ';   ' + 'FECHA: ' + '  ARTISTAS: ' + artistas +
+            print('TITULO: ' + obra['Title'] + ';   ' + '  ARTISTAS: ' + artistas +  '  FECHA: ' +
                   obra['DateAcquired'] + ';   ' + ' MEDIO: ' + obra['Medium'] + ';   ' + ' DIMENSIONES: ' + obra['Dimensions'] +'.' +   '\n')
     else:
         print('No se encontraron artistas nacidos')
@@ -238,14 +238,22 @@ while True:
         fecha_inicial = input("Porfavor, dijite la fecha inicial en el formato AAAA/MM/DD del rango que desea buscar: ")
         fecha_final = input("Porfavor, dijite la fecha final en el formato AAAA/MM/DD del rango que desea buscar: ")
         ordenadas = controller.sortobras(catalog)
-        print('' + '\n' +'Total de obras del rango: ' + str(lt.size(ordenadas)) + '\n')
         
+        start_time = time.process_time()
         nueva_lista = controller.obras_rango(ordenadas,fecha_inicial,fecha_final)
+        print('' + '\n' +'Total de obras del rango: ' + str(lt.size(nueva_lista)) + '\n')
+
+        compras = controller.obtener_compradas(nueva_lista)
+        print('' + '\n' +'Total de obras compradas del rango: ' + str(lt.size(compras)) + '\n')
+
         primeros_obras = controller.obtener_primeras_obras(nueva_lista)
         print_obras_rango_primeras(primeros_obras)
         ultimos_obras = controller.obtener_ultimas_obras(nueva_lista)
         print_obras_rango_ultimas(ultimos_obras)
-        pass
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
+        
     
     elif int(inputs[0]) == 4:
         Artista = input("Porfavor, dijite el nombre del artista que desea buscar")

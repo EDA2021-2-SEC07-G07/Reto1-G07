@@ -345,7 +345,7 @@ def obras_rango(catalog, año_inicial, año_final):
         año_inicial_nuevo = int((date.fromisoformat(año_inicial.replace('/','-'))).strftime("%Y%m%d%H%M%S"))
         año_final_nuevo = int((date.fromisoformat(año_final.replace('/','-'))).strftime("%Y%m%d%H%M%S"))
         año_adquisicion = int((date.fromisoformat(obra['DateAcquired'])).strftime("%Y%m%d%H%M%S"))
-        if año_inicial_nuevo <= año_adquisicion and año_final_nuevo >= año_adquisicion:
+        if año_inicial_nuevo < año_adquisicion and año_final_nuevo >= año_adquisicion:
             lt.addLast(obras_rango,obra)
     return obras_rango
 
@@ -354,7 +354,7 @@ def obtener_primeras_obras(catalog):
     Retorna los tres  primeros artistas nacidos
     """
 
-    primeros_tres = lt.newList()
+    primeros_tres = lt.newList('ARRAY_LIST')
     for cont in range(1, 4):
         arte = lt.getElement(catalog, cont)
         lt.addLast(primeros_tres, arte)
@@ -364,11 +364,21 @@ def obtener_ultimas_obras(catalog):
     """
     Retorna los tres  ultimos artistas nacidos
     """
-    ultimostres = lt.newList()
+    ultimostres = lt.newList('ARRAY_LIST')
     for cont in range(lt.size(catalog)-2, lt.size(catalog)+1):
         arte = lt.getElement(catalog, cont)
         lt.addLast(ultimostres, arte)
     return ultimostres
+
+def obtener_compradas(catalog):
+    """
+    Retorna los tres  ultimos artistas nacidos
+    """
+    compras = lt.newList('ARRAY_LIST')
+    for p in lt.iterator(catalog):
+        if 'Purchase' in p['CreditLine'] or 'purchase' in p['CreditLine']:
+            lt.addLast(compras, p)
+    return compras
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -441,10 +451,10 @@ def sortBooks(catalog, size, ordenamiento):
 def sortobras(catalog):
 
     obras = catalog['obras_orden']
-    sin_fecha = lt.newList()
+    sin_fecha = lt.newList('ARRAY_LIST')
 
     for p in lt.iterator(obras):
         if p['DateAcquired'] != '':
             lt.addLast(sin_fecha,p)
-    sorted_list = quick.sort(sin_fecha, cmpArtworkByDateAcquired)
+    sorted_list = merge.sort(sin_fecha, cmpArtworkByDateAcquired)
     return sorted_list
