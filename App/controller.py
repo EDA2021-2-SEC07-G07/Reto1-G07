@@ -53,7 +53,7 @@ def loadArte(catalog):
     """
     Carga los archivos de las obras de arte y se agrega a la lista de obras de arte
     """
-    Artefile = cf.data_dir + 'Moma/Artworks-utf8-30pct.csv'
+    Artefile = cf.data_dir + 'Moma/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(Artefile, encoding='utf-8'))
     for arte in input_file:
         model.addobraarte(catalog, arte)
@@ -62,7 +62,7 @@ def loadArtista(catalog):
     """
     Carga los archivos de loas artistas y se agrega a la lista de autores
     """
-    Artistafile = cf.data_dir + 'Moma/Artists-utf8-30pct.csv'
+    Artistafile = cf.data_dir + 'Moma/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(Artistafile, encoding='utf-8'))
     for tag in input_file:
         model.addartista(catalog, tag)
@@ -87,6 +87,13 @@ def sortBooks(catalog, size, ordenamiento):
     Ordena los libros por average_rating
     """
     return model.sortBooks(catalog, size, ordenamiento)
+
+def sortobras(catalog):
+    """
+    Ordena los artistas por nacimiento
+    """
+    orden = model.sortobras(catalog)
+    return orden
     
 # Funciones de consulta sobre el catálogo
 
@@ -182,3 +189,22 @@ def obtener_antiguas(catalog):
     """
     orden = model.obtener_antiguas(catalog)
     return orden
+
+def obras_rango(catalog, año_inicial, año_final):
+
+    obras_rango = model.obras_rango(catalog,año_inicial,año_final)
+    return obras_rango
+
+def obtener_ultimas_obras(catalog):
+    """
+    Retorna los tres ultimos artistas nacidos
+    """
+    obtener_ultimas_obras = model.obtener_ultimas_obras(catalog)
+    return obtener_ultimas_obras
+
+def obtener_primeras_obras(catalog):
+    """
+    Retorna los tres ultimos artistas nacidos
+    """
+    obtener_primeras_obras = model.obtener_primeras_obras(catalog)
+    return obtener_primeras_obras
