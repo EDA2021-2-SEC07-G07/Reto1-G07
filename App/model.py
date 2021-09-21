@@ -345,7 +345,7 @@ def obras_rango(catalog, año_inicial, año_final):
         año_inicial_nuevo = int((date.fromisoformat(año_inicial.replace('/','-'))).strftime("%Y%m%d%H%M%S"))
         año_final_nuevo = int((date.fromisoformat(año_final.replace('/','-'))).strftime("%Y%m%d%H%M%S"))
         año_adquisicion = int((date.fromisoformat(obra['DateAcquired'])).strftime("%Y%m%d%H%M%S"))
-        if año_inicial_nuevo < año_adquisicion and año_final_nuevo >= año_adquisicion:
+        if año_inicial_nuevo <= año_adquisicion and año_final_nuevo >= año_adquisicion:
             lt.addLast(obras_rango,obra)
     return obras_rango
 
