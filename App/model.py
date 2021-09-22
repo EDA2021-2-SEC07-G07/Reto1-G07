@@ -421,14 +421,14 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
 # Funciones de ordenamiento
 
 def sortArtistas(catalog):
-    sa.sort(catalog['nacidos_primero'], compareaños)
+    merge.sort(catalog['nacidos_primero'], compareaños)
 
 def sortcostos(catalog):
     orden = merge.sort(catalog, comparacostos)
     return orden
 
 def sortantiguas(catalog):
-    orden = sa.sort(catalog, compareantiguas)
+    orden = merge.sort(catalog, compareantiguas)
     return orden
 
 def sortBooks(catalog, size, ordenamiento):

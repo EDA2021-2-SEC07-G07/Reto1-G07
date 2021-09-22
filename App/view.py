@@ -26,6 +26,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from datetime import date
 
 import sys 
 default_limit = 1000 
@@ -237,22 +238,25 @@ while True:
     elif int(inputs[0]) == 3:
         fecha_inicial = input("Porfavor, dijite la fecha inicial en el formato AAAA/MM/DD del rango que desea buscar: ")
         fecha_final = input("Porfavor, dijite la fecha final en el formato AAAA/MM/DD del rango que desea buscar: ")
-        ordenadas = controller.sortobras(catalog)
-        
-        start_time = time.process_time()
-        nueva_lista = controller.obras_rango(ordenadas,fecha_inicial,fecha_final)
-        print('' + '\n' +'Total de obras del rango: ' + str(lt.size(nueva_lista)) + '\n')
+        fecha_limite = int((date.fromisoformat('1929/11/19'.replace('/','-'))).strftime("%Y%m%d%H%M%S")) 
+        if int((date.fromisoformat(fecha_final.replace('/','-'))).strftime("%Y%m%d%H%M%S")) < fecha_limite:
+            print('El año final debe ser mayor a 1929, ya que el museo no cuenta con obras adquiridas previamente')
+        else: 
+            ordenadas = controller.sortobras(catalog)
+            start_time = time.process_time()
+            nueva_lista = controller.obras_rango(ordenadas,fecha_inicial,fecha_final)
+            print('' + '\n' +'Total de obras del rango: ' + str(lt.size(nueva_lista)) + '\n')
 
-        compras = controller.obtener_compradas(nueva_lista)
-        print('' + '\n' +'Total de obras compradas del rango: ' + str(lt.size(compras)) + '\n')
+            compras = controller.obtener_compradas(nueva_lista)
+            print('' + '\n' +'Total de obras compradas del rango: ' + str(lt.size(compras)) + '\n')
 
-        primeros_obras = controller.obtener_primeras_obras(nueva_lista)
-        print_obras_rango_primeras(primeros_obras)
-        ultimos_obras = controller.obtener_ultimas_obras(nueva_lista)
-        print_obras_rango_ultimas(ultimos_obras)
-        stop_time = time.process_time()
-        elapsed_time_mseg = (stop_time - start_time)*1000
-        print(elapsed_time_mseg)
+            primeros_obras = controller.obtener_primeras_obras(nueva_lista)
+            print_obras_rango_primeras(primeros_obras)
+            ultimos_obras = controller.obtener_ultimas_obras(nueva_lista)
+            print_obras_rango_ultimas(ultimos_obras)
+            stop_time = time.process_time()
+            elapsed_time_mseg = (stop_time - start_time)*1000
+            print(elapsed_time_mseg)
         
     
     elif int(inputs[0]) == 4:
