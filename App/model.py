@@ -380,6 +380,17 @@ def obtener_compradas(catalog):
             lt.addLast(compras, p)
     return compras
 
+def obtener_obras_artista(catalog):
+    """
+    Retorna los tres  primeros artistas nacidos
+    """
+
+    primeros_tres = lt.newList()
+    for cont in range(1, 11):
+        arte = lt.getElement(catalog, cont)
+        lt.addLast(primeros_tres, arte)
+    return primeros_tres
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareaños(artista1, artista2):
@@ -397,9 +408,12 @@ def comparecodigos(codigo1, codigo):
     return -1
 
 def comparetecnicas(tecnica1, tecnica):
-    if (tecnica1.lower() == tecnica['Tecnica'].lower()):
+    if (tecnica1.lower().strip() == tecnica['Tecnica'].lower().strip()):
         return 0
     return -1
+
+def comparecanitdad(artista1, artista2):
+    return (float(artista1['Cantidad']) > float(artista2['Cantidad']))
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
 
@@ -458,3 +472,7 @@ def sortobras(catalog):
             lt.addLast(sin_fecha,p)
     sorted_list = merge.sort(sin_fecha, cmpArtworkByDateAcquired)
     return sorted_list
+
+def sortCantidades(catalog):
+    orden = merge.sort(catalog, comparecanitdad)
+    return orden

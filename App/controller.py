@@ -94,6 +94,13 @@ def sortobras(catalog):
     """
     orden = model.sortobras(catalog)
     return orden
+
+def sortCantidades(catalog):
+    """
+    Ordena los artistas por nacimiento
+    """
+    orden = model.sortCantidades(catalog)
+    return orden
     
 # Funciones de consulta sobre el catálogo
 
@@ -215,3 +222,10 @@ def obtener_compradas(catalog):
     """
     obtener_compradas = model.obtener_compradas(catalog)
     return obtener_compradas
+
+def obtener_obras_artista(catalog):
+    """
+    Retorna los tres ultimos artistas nacidos
+    """
+    obtener_obras_artista = model.obtener_obras_artista(catalog)
+    return obtener_obras_artista

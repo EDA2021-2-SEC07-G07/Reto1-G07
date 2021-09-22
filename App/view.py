@@ -108,7 +108,7 @@ def print_nacidosprimeros(elementos):
 def print_obras_delautor(elementos):
     size = lt.size(elementos)
     if size:
-        print( '\n' + '-'*30 +' Esta es la lista de las obras del autor que fueron hechas con la  misma tecnica: ' + '-'*30+ '\n')
+        print( '\n' + '-'*30 +' Esta es una muestra de las  obras del autor que fueron hechas con la  misma tecnica: ' + '-'*30+ '\n')
         for artista in lt.iterator(elementos):
             print('TITULO: ' + artista['Title'] + ';   ' + 'FECHA: ' +
                   artista['Date'] + ';   ' + ' MEDIO: ' + artista['Medium'] + ';   ' + ' DIMENSIONES: ' + artista['Dimensions'] +'.' +   '\n')
@@ -116,7 +116,7 @@ def print_obras_delautor(elementos):
         print('No se encontraron artistas nacidos')
 
 def print_tecnicas(elementos):
-        print('-'*30 + 'Esta es la lista de las tecnicas usadas del autor: ' + '-'*30 + '\n')
+        print('-'*30 + 'Esta es la lista de las tecnicas mas usadas del autor: ' + '-'*30 + '\n')
         for artista in lt.iterator(elementos):
             print('TITULO: ' + artista['Tecnica'] + '  CANTIDAD: ' + str(artista['Cantidad']) + '\n')
 
@@ -271,15 +271,22 @@ while True:
             print('' + '\n' +'Total de obras del artista: ' + str(lt.size(artista_final['obras'])) + '\n')
 
             tecnicas = controller.cantidad_tecnicas(artista_final)
-
-            print_tecnicas(tecnicas[1])
+            tecnicas_orden = controller.sortCantidades(tecnicas[1])
+            if lt.size(tecnicas_orden) <= 10:
+                print_tecnicas(tecnicas_orden)
+            elif lt.size(tecnicas_orden) > 10:
+                primeras = controller.obtener_obras_artista(tecnicas_orden)
+                print_tecnicas(primeras)
 
             print('La tecnica mas utilizada por el autor fue: ' + str(tecnicas[0]) + '\n')
 
             obras = controller.consulta_obras(artista_final,tecnicas[0])
 
-            print_obras_delautor(obras)
-
+            if lt.size(obras) <= 10:
+                print_obras_delautor(obras)
+            elif lt.size(obras) > 10:
+                primeras = controller.obtener_obras_artista(obras)
+                print_obras_delautor(primeras)
             stop_time = time.process_time()
             elapsed_time_mseg = (stop_time - start_time)*1000
             print(elapsed_time_mseg)
