@@ -53,7 +53,7 @@ def loadArte(catalog):
     """
     Carga los archivos de las obras de arte y se agrega a la lista de obras de arte
     """
-    Artefile = cf.data_dir + 'Moma/Artworks-utf8-small.csv'
+    Artefile = cf.data_dir + 'Moma/Artworks-utf8-large.csv'
     input_file = csv.DictReader(open(Artefile, encoding='utf-8'))
     for arte in input_file:
         model.addobraarte(catalog, arte)
@@ -62,7 +62,7 @@ def loadArtista(catalog):
     """
     Carga los archivos de loas artistas y se agrega a la lista de autores
     """
-    Artistafile = cf.data_dir + 'Moma/Artists-utf8-small.csv'
+    Artistafile = cf.data_dir + 'Moma/Artists-utf8-large.csv'
     input_file = csv.DictReader(open(Artistafile, encoding='utf-8'))
     for tag in input_file:
         model.addartista(catalog, tag)
