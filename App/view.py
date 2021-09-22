@@ -191,6 +191,14 @@ def print_obras_rango_ultimas(elementos):
                   obra['DateAcquired'] + ';   ' + ' MEDIO: ' + obra['Medium'] + ';   ' + ' DIMENSIONES: ' + obra['Dimensions'] +'.' +   '\n')
     else:
         print('No se encontraron artistas nacidos')
+
+def print_top_10(dict_mayores):
+
+    print( '\n' + '-'*30 +' Top 10 paises con mayor numero de obras: ' + '-'*30+ '\n')
+
+    for nacion in dict_mayores:
+        
+        print( str(nacion) + "    "  + "-"*5 + "    " + str(dict_mayores[nacion]) + "\n")
     
 
 catalog = None
@@ -292,7 +300,21 @@ while True:
             print(elapsed_time_mseg)
 
     elif int(inputs[0]) == 5:
-        pass
+        start_time = time.process_time()
+        obras = controller.dicc_ordena(catalog)
+        mayores_org,mayor = controller.lista_mayores(obras)
+        obras_mayor = controller.orgObras_primer(catalog,obras,mayor)
+
+        print("Top 10 paises por la nacionalidad de los creadores: ")
+        print_top_10(mayores_org)
+
+        primeros_obras,lista = controller.obtener_p_obras(obras_mayor)
+        print(lista)
+
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
+        
     elif int(inputs[0]) == 6:
         Departamento = input("Porfavor, dijite el deprtamento que desea conocer el costo del tranposrte")
 

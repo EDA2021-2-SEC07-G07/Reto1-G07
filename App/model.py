@@ -391,6 +391,121 @@ def obtener_obras_artista(catalog):
         lt.addLast(primeros_tres, arte)
     return primeros_tres
 
+def dicc_orden(catalog_mayor):
+    obras = catalog_mayor["obra_de_arte"]
+    dicc_todo = {}
+
+    for obra in lt.iterator(obras):
+        id = obra['ObjectID']
+
+        if id != '':
+            codigos = obra['ConstituentID']
+            nuevos_codigos = codigos.replace("[","")
+            nuevos_codigos = nuevos_codigos.replace("]","")
+            nuevos_codigos = nuevos_codigos.split(",")
+            artistas = catalog_mayor['artista']
+
+            for codigo in nuevos_codigos:
+                nuevo = codigo.strip()
+                
+
+
+                for p in lt.iterator(artistas):
+                    
+                    if nuevo == p['ConstituentID']:
+                        if p['Nationality'] == '' or p['Nationality'] == "Nationality unknown":
+                            nacionalidad = 'Unknown'
+                        else:
+                            nacionalidad = p['Nationality']
+                    
+                        if nacionalidad not in dicc_todo:
+
+                            dicc_todo[nacionalidad] = lt.newList('ARRAY_LIST')
+                            lt.addLast(dicc_todo[nacionalidad], id)
+                            dicc_todo[nacionalidad] = dicc_todo[nacionalidad]
+
+                        elif nacionalidad in dicc_todo:
+                            lt.addLast(dicc_todo[nacionalidad], id)
+
+    return dicc_todo
+
+def lista_mayores(obras_pais):
+    obras_p = obras_pais
+    pais_mayor = 0
+    nombre_mayor = " "
+    dicc_ordenado = {}
+    var = 0
+
+    while var < 10:
+ 
+        for pais in obras_p:
+            comp = obras_p[pais]
+            comparar = lt.size(comp)
+
+            if pais not in dicc_ordenado:
+                if comparar > pais_mayor:
+                    pais_mayor = comparar
+                    nombre_mayor = pais
+                    
+        dicc_ordenado[nombre_mayor] = pais_mayor
+        var += 1
+        pais_mayor = 0
+        nombre_mayor = " "
+
+    pais_mayor2 = 0
+    nombre_mayor2 = " "    
+    for pais in obras_p:
+            comp = obras_p[pais]
+            comparar = lt.size(comp)
+
+            if comparar > pais_mayor2:
+                pais_mayor2 = comparar
+                nombre_mayor2 = pais
+
+    return dicc_ordenado,nombre_mayor2
+
+def orgObras_primer(catalog,obras,mayor):
+    obras_artes = catalog["obra_de_arte"]
+    codigos = obras[mayor]["elements"]
+
+
+    lista_retorno = lt.newList("ARRAY_LIST")
+
+    for arte in lt.iterator(obras_artes): 
+        obra_codi = arte["ObjectID"]
+        for codigo in codigos: 
+            if codigo == obra_codi:
+                lt.addLast(lista_retorno, arte)
+
+    lista_retorno = lista_retorno["elements"]
+    return lista_retorno
+
+
+def obtener_p_obras(datos):
+    i = 0
+
+    primeros = lt.newList("ARRAY_LIST")
+    datos_pri = lt.newList("ARRAY_LIST")
+
+    primeros_tres = lt.newList()
+    for o in datos:
+        primeros = lt.newList()
+        if i < 3:
+            lt.addLast(primeros_tres, o)
+            
+            lt.addLast(primeros, o["Title"])
+            lt.addLast(primeros, o["Date"])
+            lt.addLast(primeros, o["Medium"])
+            lt.addLast(primeros, o["Dimensions"])
+
+            lt.addLast(datos_pri, primeros)
+
+            i += 1
+        else:
+            break
+
+    return primeros_tres,datos_pri
+    
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareaños(artista1, artista2):

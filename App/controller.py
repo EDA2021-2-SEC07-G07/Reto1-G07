@@ -53,7 +53,7 @@ def loadArte(catalog):
     """
     Carga los archivos de las obras de arte y se agrega a la lista de obras de arte
     """
-    Artefile = cf.data_dir + 'Moma/Artworks-utf8-large.csv'
+    Artefile = cf.data_dir + 'Moma/Artworks-utf8-small.csv'
     input_file = csv.DictReader(open(Artefile, encoding='utf-8'))
     for arte in input_file:
         model.addobraarte(catalog, arte)
@@ -62,7 +62,7 @@ def loadArtista(catalog):
     """
     Carga los archivos de loas artistas y se agrega a la lista de autores
     """
-    Artistafile = cf.data_dir + 'Moma/Artists-utf8-large.csv'
+    Artistafile = cf.data_dir + 'Moma/Artists-utf8-small.csv'
     input_file = csv.DictReader(open(Artistafile, encoding='utf-8'))
     for tag in input_file:
         model.addartista(catalog, tag)
@@ -229,3 +229,20 @@ def obtener_obras_artista(catalog):
     """
     obtener_obras_artista = model.obtener_obras_artista(catalog)
     return obtener_obras_artista
+
+def dicc_ordena(catalog):
+
+    dicc = model.dicc_orden(catalog)
+    return dicc
+
+def lista_mayores(obras_pais):
+    lista_mayores,mayor = model.lista_mayores(obras_pais)
+    return lista_mayores,mayor 
+
+def orgObras_primer(catalog,obras,mayor):
+    orgObras_primer = model.orgObras_primer(catalog,obras,mayor)
+    return orgObras_primer
+
+def obtener_p_obras(datos):
+    obtener_p_obras,lista = model.obtener_p_obras(datos)
+    return obtener_p_obras,lista
